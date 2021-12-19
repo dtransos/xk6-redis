@@ -73,7 +73,7 @@ func (*REDIS) Do(client *redis.Client, cmd string, key string) string {
 }
 
 // Scan scan keys for match
-func (*REDIS) Scan(client *redis.Client, cursor uint64, match string, count int64) ScanResult {
+func (*REDIS) Scan(client *redis.Client, cursor uint64, match string, count int64) []byte {
 	keys, cursor, err := client.Scan(cursor, match, count).Result()
 	if err != nil {
 		ReportError(err, "Failed to scan keys")
