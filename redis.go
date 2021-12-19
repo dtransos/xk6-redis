@@ -1,7 +1,6 @@
 package redis
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -73,15 +72,14 @@ func (*REDIS) Do(client *redis.Client, cmd string, key string) string {
 }
 
 // Scan scan keys for match
-func (*REDIS) Scan(client *redis.Client, cursor uint64, match string, count int64) []byte {
+func (*REDIS) Scan(client *redis.Client, cursor uint64, match string, count int64) *ScanResult {
 	keys, cursor, err := client.Scan(cursor, match, count).Result()
 	if err != nil {
 		ReportError(err, "Failed to scan keys")
 	}
-	scanResult := &ScanResult{
+	val := &ScanResult{
 		Cursor: cursor,
 		Keys:   keys,
 	}
-	val, _ := json.Marshal(scanResult)
 	return val
 }
