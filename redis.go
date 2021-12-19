@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -13,6 +14,11 @@ func init() {
 
 // REDIS is the k6 Redis extension.
 type REDIS struct{}
+
+type ScanResult struct {
+	Cursor uint64 `json:"cursor"`
+	Keys   []string `json:"keys"`
+}
 
 // NewClient creates a new Redis client
 func (*REDIS) NewClient(addr string, password string, bd int) *redis.Client {
@@ -64,4 +70,18 @@ func (*REDIS) Do(client *redis.Client, cmd string, key string) string {
 	}
 	// TODO: Support more types, not only strings.
 	return val.(string)
+}
+
+// Scan scan keys for match
+func (*REDIS) Scan(client *redis.Client, cursor uint64, match string, count int64) ScanResult {
+	keys, cursor, err := client.Scan(cursor, match, count).Result()
+	if err != nil {
+		ReportError(err, "Failed to scan keys")
+	}
+	scanResult := &ScanResult{
+		Cursor: cursor,
+		Keys:   keys,
+	}
+	val, _ := json.Marshal(scanResult)
+	return val
 }
