@@ -83,3 +83,37 @@ func (*REDIS) Scan(client *redis.Client, cursor uint64, match string, count int6
 	}
 	return val
 }
+
+// Sets field in the hash stored at key to value.
+func (*REDIS) HSet(client *redis.Client, key string, field string, value string) {
+	err := client.HSet(key, field, value).Err()
+	if err != nil {
+		ReportError(err, "Failed to save field:value for specified key")
+	}
+}
+
+// Returns the value associated with field in the hash stored at key.
+func (*REDIS) HGet(client *redis.Client, key string, field string) string {
+	val, err := client.HGet(key, field).Result()
+	if err != nil {
+		ReportError(err, "Failed to get field for specified key")
+	}
+	return val
+}
+
+// Returns all fields and values of the hash stored at key.
+func (*REDIS) HGetAll(client *redis.Client, key string) map[string]string {
+	val, err := client.HGetAll(key).Result()
+	if err != nil {
+		ReportError(err, "Failed to get fields, values for specified key")
+	}
+	return val
+}
+
+// Delete fields from hash stored at key.
+func (*REDIS) HDel(client *redis.Client, key string, fields ...string) {
+	err := client.HDel(key, fields...).Err()
+	if err != nil {
+		ReportError(err, "Failed to delete specified fields from key")
+	}
+}
