@@ -1,5 +1,10 @@
 # xk6-redis
 
+The original and deprecated repo - https://github.com/dgzlopes/xk6-redis
+
+This fork is primarily for a historical record as well as to act as a last ditch backup plan for performance testing
+until the ec2 instances can be updated to use the latest k6 and redis feature.
+
 This is a [k6](https://go.k6.io/k6) extension using the [xk6](https://github.com/grafana/xk6) system.
 
 | :exclamation: This is a proof of concept, isn't supported by the k6 team, and may break in the future. USE AT YOUR OWN RISK! |
