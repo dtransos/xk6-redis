@@ -1,4 +1,4 @@
-module github.com/mlepouttresos/xk6-redis
+module github.com/dtransos/xk6-redis
 
 go 1.15
 
